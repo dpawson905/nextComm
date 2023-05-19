@@ -10,6 +10,9 @@ import basket from '../../public/basket.png';
 
 export default function Cart() {
   const cartStore = useCartStore();
+  const totalPrice = cartStore.cart.reduce((acc, item) => {
+    return acc + item.unit_amount! * item.quantity!;
+  }, 0);
   return (
     <div
       onClick={() => cartStore.toggleCart()}
@@ -21,7 +24,7 @@ export default function Cart() {
           <h1 className='text-center p-4'>Here's your shopping 📃</h1>
         )}
         {cartStore.cart.map((item) => (
-          <div key={item.id} className='flex p-4 gap-4'>
+          <div key={item.id} className='flex p-4 gap-4 tracking-wide'>
             <Image
               className='rounded-md h-16 w-16'
               src={item.image}
@@ -30,7 +33,7 @@ export default function Cart() {
               height={80}
               
             />
-            <div>
+            <div className='tracking-wider'>
               <h2>{item.name}</h2>
               <div className='flex gap-2'>
                 <h2>Qty: {item.quantity}</h2>
@@ -67,16 +70,18 @@ export default function Cart() {
             </div>
           </div>
         ))}
+        
         {cartStore.cart.length > 0 && (
-          <div className="px-4">
-            <button className='transition-all py-2 mt-4 bg-teal-700 w-full rounded-md text-white hover:bg-teal-800'>
+          <div className="px-4 tracking-wider">
+            <p>Total: {totalPrice && formatPrice(totalPrice)}</p>
+            <button className='tracking-wider transition-all py-2 mt-4 bg-teal-700 w-full rounded-md text-white hover:bg-teal-800'>
               Checkout
             </button>
           </div>
           
         )}
         {!cartStore.cart.length && (
-          <div className='h-screen flex flex-col justify-center items-center gap-6 text-2xl font-medium opacity-75'>
+          <div className='h-screen flex flex-col justify-center items-center gap-6 text-2xl font-medium opacity-75 tracking-wider'>
             <h1>Uhhh ohhhh... it's empty 😢</h1>
             <Image className='hue-rotate-90' src={basket} alt='empty-cart' width={200} height={200} />
           </div>
