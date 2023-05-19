@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { SearchParamTypes } from '@/types/searchParamTypes';
 import formatPrice from '@/utils/PriceFormat';
+import AddCart from './AddCart';
 
 export default function Product({ searchParams }: SearchParamTypes) {
   return (
@@ -27,9 +28,7 @@ export default function Product({ searchParams }: SearchParamTypes) {
               : 9999}
           </p>
         </div>
-        <button className='my-8 text-white py-2 px-6 bg-teal-700 rounded-md'>
-          Add to card
-        </button>
+        <AddCart {...searchParams} />
       </div>
     </div>
   );
