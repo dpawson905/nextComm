@@ -22,7 +22,7 @@ export default async function RootLayout({
   return (
     <html lang='en'>
       <body>
-        <div className='mx-64'>
+        <div className='px-4'>
           <Nav user={session?.user} expires={session?.expires as string} />
           {children}
         </div>

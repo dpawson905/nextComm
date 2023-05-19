@@ -19,7 +19,7 @@ export default function Nav({user}: Session){
           <>
             <li>
               <Image 
-                className='rounded-full' 
+                className='rounded-full shadow-md' 
                 src={user?.image as string} 
                 alt={user.name as string} 
                 width={48} 
