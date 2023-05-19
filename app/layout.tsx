@@ -5,6 +5,12 @@ import Nav from './components/Nav';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import Hydrate from './components/Hydrate';
+import { Quicksand, Lobster_Two } from 'next/font/google';
+
+const quicksand = Quicksand({
+  weight: ['400', '500', '700'],
+  subsets: ['latin'],
+});
 
 export const metadata = {
   title: 'NextComm',
@@ -19,10 +25,9 @@ export default async function RootLayout({
 }) {
   // Fetch the user
   const session = await getServerSession(authOptions);
-  console.log(session);
   return (
     <html lang='en'>
-      <body>
+      <body className={`${quicksand.className}`}>
         <Hydrate>
           <div className='px-4'>
             <Nav user={session?.user} expires={session?.expires as string} />
