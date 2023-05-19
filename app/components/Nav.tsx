@@ -1,14 +1,17 @@
+/** @format */
+
 'use client';
 
-import { Session } from 'next-auth'
-import { signIn } from 'next-auth/react'
+import { Session } from 'next-auth';
+import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Cart from './Cart';
 import { useCartStore } from '@/store';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
+import { motion, AnimatePresence } from 'framer-motion';
 
-export default function Nav({user}: Session){
+export default function Nav({ user }: Session) {
   const cartStore = useCartStore();
   return (
     <nav className='flex justify-between items-center py-12'>
@@ -16,36 +19,47 @@ export default function Nav({user}: Session){
         <h1>Styled</h1>
       </Link>
       <ul className='flex items-center gap-12'>
-        <li onClick={() => cartStore.toggleCart()} className='flex items-center text-3xl cursor-pointer relative text-teal-900'>
+        <li
+          onClick={() => cartStore.toggleCart()}
+          className='flex items-center text-3xl cursor-pointer relative text-teal-900'>
           <AiOutlineShoppingCart />
-          {cartStore.cart.length > 0 && (
-            <span className='bg-teal-700 text-white text-sm font-bold w-5 h-5 rounded-full absolute left-4 bottom-4 flex items-center justify-center m-0 p-0'>
-              {cartStore.cart.length}
-            </span>
-          )}
+          <AnimatePresence>
+            {cartStore.cart.length > 0 && (
+              <motion.span
+                animate={{ scale: 1 }}
+                initial={{ scale: 0 }}
+                exit={{scale: 0}}
+                className='bg-teal-700 text-white text-sm font-bold w-5 h-5 rounded-full absolute left-4 bottom-4 flex items-center justify-center m-0 p-0'>
+                {cartStore.cart.length}
+              </motion.span>
+            )}
+          </AnimatePresence>
         </li>
         {/* If the user is not signed in */}
         {!user && (
           <li className='transition-all bg-teal-600 text-white py-2 px-4 rounded-md hover:bg-teal-700'>
-            <button className='' onClick={() => signIn()}>Sign In</button>
+            <button className='' onClick={() => signIn()}>
+              Sign In
+            </button>
           </li>
         )}
         {user && (
           <>
             <li>
-              <Image 
-                className='rounded-full shadow-md' 
-                src={user?.image as string} 
-                alt={user.name as string} 
-                width={36} 
+              <Image
+                className='rounded-full shadow-md'
+                src={user?.image as string}
+                alt={user.name as string}
+                width={36}
                 height={36}
               />
             </li>
           </>
-          
         )}
       </ul>
-      {cartStore.isOpen && <Cart />}
+      <AnimatePresence>
+        {cartStore.isOpen && <Cart />}
+      </AnimatePresence>
     </nav>
-  )
+  );
 }

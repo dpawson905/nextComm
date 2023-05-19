@@ -7,6 +7,7 @@ import { useCartStore } from '@/store';
 import formatPrice from '@/utils/PriceFormat';
 import { IoAddCircle, IoRemoveCircle } from 'react-icons/io5';
 import basket from '../../public/basket.png';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Cart() {
   const cartStore = useCartStore();
@@ -14,26 +15,32 @@ export default function Cart() {
     return acc + item.unit_amount! * item.quantity!;
   }, 0);
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0 }}
       onClick={() => cartStore.toggleCart()}
       className='fixed w-full h-screen left-0 top-0 bg-black/25'>
-      <div
+      <motion.div
+        layout
         onClick={(e) => e.stopPropagation()}
         className='bg-white absolute right-0 top-0 w-1/4 h-screen overflow-y-scroll text-gray-700'>
         {cartStore.cart.length > 0 && (
           <h1 className='text-center p-4'>Here's your shopping 📃</h1>
         )}
         {cartStore.cart.map((item) => (
-          <div key={item.id} className='flex p-4 gap-4 tracking-wide'>
+          <motion.div
+            layout
+            key={item.id}
+            className='flex p-4 gap-4 tracking-wide'>
             <Image
               className='rounded-md h-16 w-16'
               src={item.image}
               alt={item.name}
               width={80}
               height={80}
-              
             />
-            <div className='tracking-wider'>
+            <motion.div layout className='tracking-wider'>
               <h2>{item.name}</h2>
               <div className='flex gap-2'>
                 <h2>Qty: {item.quantity}</h2>
@@ -67,26 +74,38 @@ export default function Cart() {
                   ? formatPrice(item.unit_amount as number)
                   : 9999}
               </p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         ))}
-        
-        {cartStore.cart.length > 0 && (
-          <div className="px-4 tracking-wider">
-            <p>Total: {totalPrice && formatPrice(totalPrice)}</p>
-            <button className='tracking-wider transition-all py-2 mt-4 bg-teal-700 w-full rounded-md text-white hover:bg-teal-800'>
-              Checkout
-            </button>
-          </div>
-          
-        )}
-        {!cartStore.cart.length && (
-          <div className='h-screen flex flex-col justify-center items-center gap-6 text-2xl font-medium opacity-75 tracking-wider'>
-            <h1>Uhhh ohhhh... it's empty 😢</h1>
-            <Image className='hue-rotate-90' src={basket} alt='empty-cart' width={200} height={200} />
-          </div>
-        )}
-      </div>
-    </div>
+        <motion.div layout className='px-4 tracking-wider'>
+          {cartStore.cart.length > 0 && (
+            <>
+              <p>Total: {totalPrice && formatPrice(totalPrice)}</p>
+              <button className='tracking-wider transition-all py-2 mt-4 bg-teal-700 w-full rounded-md text-white hover:bg-teal-800'>
+                Checkout
+              </button>
+            </>
+          )}
+        </motion.div>
+        <AnimatePresence>
+          {!cartStore.cart.length && (
+            <motion.div
+              animate={{ scale: 1, rotateZ: 0, opacity: 0.75 }}
+              initial={{ scale: 0.5, rotateZ: -10, opacity: 0 }}
+              exit={{ scale: 0.5, rotateZ: -10, opacity: 0 }}
+              className='h-screen flex flex-col justify-center items-center gap-6 text-2xl font-medium opacity-75 tracking-wider'>
+              <h1>Uhhh ohhhh... it's empty 😢</h1>
+              <Image
+                className='hue-rotate-90'
+                src={basket}
+                alt='empty-cart'
+                width={200}
+                height={200}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </motion.div>
   );
 }
