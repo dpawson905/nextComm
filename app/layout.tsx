@@ -29,7 +29,7 @@ export default async function RootLayout({
     <html lang='en'>
       <body className={`${quicksand.className}`}>
         <Hydrate>
-          <div className='px-4'>
+          <div className='mx-4 lg:mx-48'>
             <Nav user={session?.user} expires={session?.expires as string} />
             {children}
           </div>

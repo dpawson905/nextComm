@@ -28,7 +28,7 @@ export default function Product({
           width={800}
           height={800}
         />
-        <div className='font-medium py-2'>
+        <div className='font-md py-2'>
           <h1 className='text-2xl tracking-wider'>{name}</h1>
           <h2 className='tracking-wide text-xl text-teal-700'>
             {unit_amount ? formatPrice(unit_amount as number) : 9999}
